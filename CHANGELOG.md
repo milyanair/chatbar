@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.1.2
+- Made clear that Chat Bar requires Nextcloud Talk (spreed): store description, README (new Requirements section) and app description
+- Admin settings show a warning when Talk is not enabled; the bar stays hidden and no scripts load (no errors)
+
 ## 1.1.1
 - Compatibility: Nextcloud 32 to 35 (tested on 32.0.15, 33.0.10 and 35.0.2)
 - Default Notify (unread badge) color is now #db3939 (previously the theme error color). Personal and admin choices are unchanged.

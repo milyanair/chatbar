@@ -6,6 +6,8 @@
 
 **Never miss a Talk message again, without leaving the app you are working in.**
 
+**Requires Nextcloud Talk (spreed).** Install and enable the Talk app first; without it Chat Bar stays hidden.
+
 Chat Bar puts a small floating Talk bar on every Nextcloud page. You see who wrote, what they said and how many messages are waiting, and you can reply right there in Files, Calendar, Deck or anywhere else.
 
 ### Highlights
@@ -26,6 +28,6 @@ Chat Bar talks only to your own Nextcloud's Talk API, using your existing sessio
 
 ### Requirements
 - Nextcloud 32 to 35
-- The **Talk** (spreed) app. Chat Bar stays hidden for users who do not have Talk.
+- The **Talk** (spreed) app, installed and enabled. Chat Bar stays hidden for users who do not have Talk, and admins see a note in Administration settings > Chat Bar.
 
 **Screenshots:** screenshots/1-collapsed.png, screenshots/2-expanded.png, screenshots/3-colors.png, screenshots/4-dark.png, screenshots/5-settings.png

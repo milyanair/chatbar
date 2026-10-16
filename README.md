@@ -2,6 +2,8 @@
 
 A floating, draggable chat bar for **Nextcloud Talk** on every Nextcloud page.
 
+> **Requires Nextcloud Talk (spreed).** Install and enable Talk before enabling Chat Bar.
+
 - Unread badge, last-message preview (sender, 2 lines, relative time) and a quick reply field
 - Expands to the last 10 messages of the selected conversation
 - Flashes and shows a browser notification (when permitted) on new messages
@@ -11,7 +13,10 @@ A floating, draggable chat bar for **Nextcloud Talk** on every Nextcloud page.
 
 ## Requirements
 - Nextcloud 32 to 35
-- Talk (spreed) enabled for the user. Without Talk the bar stays hidden.
+- **Nextcloud Talk (spreed)**, installed and enabled. Chat Bar uses the Talk API of your own server and has no chat backend of its own.
+- Talk must be enabled for each user who should see the bar (if Talk is limited to groups, Chat Bar follows that).
+
+Without Talk, Chat Bar does nothing harmful: the bar is not rendered, no scripts are loaded, users see a short note in Personal settings and admins see a warning in Administration settings > Chat Bar. The Nextcloud app store schema has no way to declare a dependency on another app, so this is checked at runtime.
 
 ## Settings
 - **Administration settings → Chat Bar:** show to all users (default) or only to selected groups.

@@ -4,6 +4,9 @@
 ?>
 <div id="chatbar-admin" class="section">
 	<h2><?php p($l->t('Chat Bar')); ?></h2>
+	<?php if (empty($_['talk'])): ?>
+		<p id="chatbar-talk-missing" class="settings-hint" style="border-left:4px solid var(--color-warning, #c28900);padding:8px 12px;background:var(--color-warning-hover, rgba(194,137,0,.1));color:var(--color-main-text)"><strong><?php p($l->t('Nextcloud Talk is not enabled.')); ?></strong> <?php p($l->t('Chat Bar requires the Talk (spreed) app and stays hidden for all users until Talk is installed and enabled.')); ?></p>
+	<?php endif; ?>
 	<p class="settings-hint"><?php p($l->t('Leave all groups unchecked to show the Chat Bar to every user who has Talk. Check groups to limit it to their members.')); ?></p>
 	<?php foreach ($_['groups'] as $g): ?>
 		<p><input type="checkbox" class="checkbox chatbar-group" id="chatbar-g-<?php p(md5($g['id'])); ?>" value="<?php p($g['id']); ?>" <?php if (in_array($g['id'], $_['selected'], true)) print_unescaped('checked'); ?>>
