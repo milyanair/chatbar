@@ -1,0 +1,31 @@
+# Chat Bar
+
+**Summary (one line):** Talk in a floating bar on every page: read, reply and never miss a message
+
+**Description:**
+
+**Never miss a Talk message again, without leaving the app you are working in.**
+
+Chat Bar puts a small floating Talk bar on every Nextcloud page. You see who wrote, what they said and how many messages are waiting, and you can reply right there in Files, Calendar, Deck or anywhere else.
+
+### Highlights
+- 💬 **Talk on every page:** unread count, a last-message preview and a quick reply field
+- 📖 **Expand to read:** the latest messages of any conversation, one click away
+- 🔔 **Hard to miss:** the bar flashes and can show a browser notification when something new arrives
+- ✋ **Put it anywhere:** drag it by the header; the position is remembered
+- 🎨 **Make it yours:** personal Action and Notify colors, or simply follow your theme in light and dark mode
+- ⚡ **Lightweight:** plain JavaScript, no build step, no external services
+
+### Privacy
+Chat Bar talks only to your own Nextcloud's Talk API, using your existing session. It does not embed the Talk UI, store messages, or contact any third party.
+
+### For admins
+- Enable it for everyone or only for selected groups
+- Set default colors for your users
+- Users can hide it for themselves in Personal settings
+
+### Requirements
+- Nextcloud 32 to 35
+- The **Talk** (spreed) app. Chat Bar stays hidden for users who do not have Talk.
+
+**Screenshots:** screenshots/1-collapsed.png, screenshots/2-expanded.png, screenshots/3-colors.png, screenshots/4-dark.png, screenshots/5-settings.png
