@@ -23,7 +23,7 @@
 #chatbar .cb-m b{font-weight:600}
 #chatbar .cb-t{color:var(--color-text-maxcontrast);font-size:11px;margin-left:6px}
 #chatbar .cb-x{white-space:pre-wrap;word-break:break-word}
-#chatbar .cb-me .cb-x{color:var(--color-primary-element-text-dark,var(--color-primary-element))}
+#chatbar .cb-me .cb-x{color:var(--color-main-text);border-left:3px solid var(--cb-action,var(--color-primary-element,#0082c9));padding-left:6px}
 #chatbar .cb-empty{color:var(--color-text-maxcontrast);text-align:center;padding:10px 0}
 #chatbar .cb-prev{padding:6px 10px 2px;cursor:pointer;border-top:1px solid var(--color-border)}
 #chatbar.cb-open .cb-prev{display:none}
@@ -35,5 +35,16 @@
 #chatbar button.cb-send{height:36px;min-height:36px;margin:0;padding:0 12px;background-color:var(--cb-action,var(--color-primary-element));border-color:var(--cb-action,var(--color-primary-element));color:var(--cb-action-text,var(--color-primary-element-text,#fff))}
 #chatbar.cb-flash{animation:cbflash 1s ease-in-out 3}
 @keyframes cbflash{50%{box-shadow:0 0 0 4px var(--cb-notify,var(--color-primary-element,#0082c9)),0 6px 24px rgba(0,0,0,.18)}}
+#chatbar .cb-head:focus-visible{outline:2px solid var(--color-main-text);outline-offset:-2px}
+.cb-menu{position:fixed;z-index:10060;min-width:220px;max-width:300px;margin:0;padding:4px 0;list-style:none;
+	background:var(--color-main-background);color:var(--color-main-text);border:1px solid var(--color-border);
+	border-radius:var(--border-radius-large,10px);box-shadow:0 4px 18px var(--color-box-shadow,rgba(0,0,0,.25));font-size:14px;font-family:var(--font-face)}
+.cb-menu:focus{outline:none}
+.cb-menu .cb-menu-item{display:flex;flex-direction:column;justify-content:center;min-height:36px;padding:4px 14px;cursor:pointer;line-height:1.3}
+.cb-menu .cb-menu-item:hover,.cb-menu .cb-menu-item:focus{background:var(--color-background-hover);outline:none}
+.cb-menu .cb-menu-item:focus-visible{box-shadow:inset 0 0 0 2px var(--color-primary-element,#0082c9)}
+.cb-menu .cb-menu-hint{font-size:12px;color:var(--color-text-maxcontrast)}
+.cb-menu .cb-menu-sep{height:1px;margin:4px 0;background:var(--color-border)}
+.cb-menu .cb-menu-info{padding:4px 14px 6px;font-size:12px;color:var(--color-text-maxcontrast);line-height:1.3}
 @media (max-width:640px){#chatbar{display:none!important}}
 @media print{#chatbar{display:none!important}}

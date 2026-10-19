@@ -8,6 +8,7 @@ A floating, draggable chat bar for **Nextcloud Talk** on every Nextcloud page.
 - Expands to the last 10 messages of the selected conversation
 - Flashes and shows a browser notification (when permitted) on new messages
 - Drag it by its header; the position is remembered per user and browser
+- Right-click the header (or Shift+F10 / the Menu key when it is focused, or long-press on touch) for a menu: Minimize or Expand, Move to the other side, Open in Talk, Chat Bar settings, Close for now (until the page is reloaded)
 - Uses the instance theming colors and works in light and dark mode
 - Hidden on the Talk app itself, inside iframes and on screens narrower than 640 px
 

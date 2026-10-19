@@ -15,6 +15,7 @@ Chat Bar puts a small floating Talk bar on every Nextcloud page. You see who wro
 - 📖 **Expand to read:** the latest messages of any conversation, one click away
 - 🔔 **Hard to miss:** the bar flashes and can show a browser notification when something new arrives
 - ✋ **Put it anywhere:** drag it by the header; the position is remembered
+- 🖱️ **Quick menu:** right-click the header (or press Shift+F10, or long-press on touch) to minimize, move, open Talk or settings, or close the bar for now
 - 🎨 **Make it yours:** personal Action and Notify colors, or simply follow your theme in light and dark mode
 - ⚡ **Lightweight:** plain JavaScript, no build step, no external services
 

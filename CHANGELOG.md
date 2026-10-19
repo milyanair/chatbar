@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.2.0
+- New context menu on the Chat Bar header: Minimize or Expand, Move to the other side, Open in Talk, Chat Bar settings, and Close for now (hides the bar until the page is reloaded; nothing is saved)
+- Opens with a right-click, the Menu key or Shift+F10 on the focused header, or a touch long-press (about 500 ms). Arrow keys, Home, End, Enter and Escape work; ARIA menu roles for screen readers
+- The header can now be reached with Tab
+- Your own messages in the expanded view are now easy to read in light and dark mode (they were very faint before)
+
 ## 1.1.2
 - Made clear that Chat Bar requires Nextcloud Talk (spreed): store description, README (new Requirements section) and app description
 - Admin settings show a warning when Talk is not enabled; the bar stays hidden and no scripts load (no errors)

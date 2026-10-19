@@ -36,7 +36,8 @@
 	function el(tag, c, txt) { var e = document.createElement(tag); if (c) e.className = c; if (txt != null) e.textContent = txt; return e }
 
 	var bar = el('div'); bar.id = 'chatbar'; bar.setAttribute('role', 'complementary'); bar.setAttribute('aria-label', t('Chat Bar'))
-	var head = el('div', 'cb-head'); head.title = t('Drag to move')
+	var head = el('div', 'cb-head'); head.title = t('Drag to move. Right-click for more options')
+	head.tabIndex = 0; head.setAttribute('aria-haspopup', 'menu'); head.setAttribute('aria-label', t('Chat Bar menu (Shift+F10)'))
 	var badge = el('span', 'cb-badge cb-zero', '0')
 	head.append(el('span', 'cb-grip', '\u22EE\u22EE'), el('span', 'cb-title', t('Talk')), badge)
 	var row = el('div', 'cb-row')
@@ -182,6 +183,103 @@
 			.then(function () { send.disabled = false; inp.focus() })
 	}
 	inp.addEventListener('focus', function () { if ('Notification' in window && Notification.permission === 'default') { try { Notification.requestPermission() } catch (e) {} } })
+
+	// Header context menu: right-click, ContextMenu key or Shift+F10 on the focused header, or a touch long-press.
+	var menu = null, menuKeys = null, menuOrigin = null, closedForNow = false, mirrored = false
+	function closeMenu(refocus) {
+		if (!menu) return
+		menu.remove(); menu = null
+		head.setAttribute('aria-expanded', 'false'); head.removeAttribute('aria-controls')
+		document.removeEventListener('pointerdown', outsideMenu, true)
+		window.removeEventListener('blur', blurMenu); window.removeEventListener('resize', blurMenu)
+		if (menuKeys) { window.removeEventListener('keydown', menuKeys, true); menuKeys = null }
+		if (refocus && menuOrigin && menuOrigin.isConnected) menuOrigin.focus()
+	}
+	function outsideMenu(e) { if (menu && !menu.contains(e.target)) closeMenu(false) }
+	function blurMenu() { closeMenu(false) }
+	function closeForNow() { // in-memory only: the bar comes back after a page refresh
+		closedForNow = true; closeMenu(false); clearTimeout(timer); timer = -1; bar.remove()
+	}
+	function moveToOtherSide() { // in-memory only: Chat Bar has no saved side setting
+		var r = bar.getBoundingClientRect(), x = window.innerWidth - r.width - r.left
+		mirrored = !mirrored; clampTo(x, r.top)
+	}
+	function menuItems() {
+		return [
+			{ label: expanded ? t('Minimize') : t('Expand'), run: function () { setExpanded(!expanded) } },
+			{ label: t('Move to the other side'), run: moveToOtherSide },
+			{ sep: true },
+			{ label: t('Open in Talk'), run: function () { open.onclick() } },
+			{ label: t('Chat Bar settings'), run: function () { location.href = url('/settings/user/chatbar') } },
+			{ sep: true },
+			{ label: t('Close for now'), hint: t('Until you reload the page'), run: closeForNow },
+			{ sep: true },
+			{ label: t('Tip: Shift+F10 or the Menu key opens this menu'), info: true }
+		]
+	}
+	function openMenu(x, y, fromKeyboard) {
+		closeMenu(false)
+		menuOrigin = head
+		menu = el('ul', 'cb-menu'); menu.id = 'chatbar-menu'; menu.setAttribute('role', 'menu'); menu.setAttribute('aria-label', t('Chat Bar menu'))
+		var items = []
+		menuItems().forEach(function (it) {
+			if (it.sep) { var s = el('li', 'cb-menu-sep'); s.setAttribute('role', 'separator'); menu.append(s); return }
+			var li = el('li', it.info ? 'cb-menu-info' : 'cb-menu-item')
+			if (it.info) { li.textContent = it.label; li.setAttribute('role', 'presentation'); menu.append(li); return }
+			li.setAttribute('role', 'menuitem'); li.tabIndex = -1
+			li.append(el('span', 'cb-menu-label', it.label))
+			if (it.hint) li.append(el('span', 'cb-menu-hint', it.hint))
+			li.addEventListener('click', function (e) { e.preventDefault(); var keep = it.run !== closeForNow; closeMenu(keep); it.run() })
+			menu.append(li); items.push(li)
+		})
+		menuKeys = function (e) {
+			if (!menu || !menu.contains(document.activeElement)) return
+			e.stopPropagation() // keep host-app shortcuts (Files arrow and Enter handling) away from the open menu
+			var i = items.indexOf(document.activeElement)
+			if (e.key === 'ArrowDown') { e.preventDefault(); items[(i + 1) % items.length].focus() }
+			else if (e.key === 'ArrowUp') { e.preventDefault(); items[(i - 1 + items.length) % items.length].focus() }
+			else if (e.key === 'Home') { e.preventDefault(); items[0].focus() }
+			else if (e.key === 'End') { e.preventDefault(); items[items.length - 1].focus() }
+			else if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); if (i >= 0) items[i].click() }
+			else if (e.key === 'Escape') { e.preventDefault(); e.stopPropagation(); closeMenu(true) }
+			else if (e.key === 'Tab') { closeMenu(false) }
+		}
+		window.addEventListener('keydown', menuKeys, true)
+		menu.addEventListener('contextmenu', function (e) { e.preventDefault() })
+		document.body.append(menu)
+		var w = menu.offsetWidth, h = menu.offsetHeight
+		menu.style.left = Math.max(4, Math.min(x, window.innerWidth - w - 4)) + 'px'
+		menu.style.top = Math.max(4, Math.min(y, window.innerHeight - h - 4)) + 'px'
+		head.setAttribute('aria-expanded', 'true'); head.setAttribute('aria-controls', menu.id)
+		document.addEventListener('pointerdown', outsideMenu, true) // safe: every way of opening fires after its own pointerdown
+		window.addEventListener('blur', blurMenu); window.addEventListener('resize', blurMenu)
+		if (fromKeyboard) items[0].focus(); else { menu.tabIndex = -1; menu.focus() }
+	}
+	head.addEventListener('contextmenu', function (e) { e.preventDefault(); openMenu(e.clientX, e.clientY, false) })
+	head.addEventListener('keydown', function (e) {
+		if (e.key === 'ContextMenu' || (e.shiftKey && e.key === 'F10')) {
+			e.preventDefault(); var r = head.getBoundingClientRect(); openMenu(r.left + 8, r.bottom + 2, true)
+		}
+	})
+	var press = null
+	function swallowClick() { // the browser sends a click when the finger lifts after a long-press; do not let it pick a menu item
+		function eat(e) { e.preventDefault(); e.stopPropagation(); done() }
+		function done() { document.removeEventListener('click', eat, true); clearTimeout(tm) }
+		document.addEventListener('click', eat, true); var tm = setTimeout(done, 1000)
+	}
+	head.addEventListener('pointerdown', function (e) {
+		if (e.pointerType === 'mouse') return
+		var sx = e.clientX, sy = e.clientY
+		clearTimeout(press)
+		press = setTimeout(function () { press = null; openMenu(sx, sy, false); swallowClick() }, 500)
+		function cancel(ev) {
+			if (ev.type === 'pointermove' && Math.abs(ev.clientX - sx) < 10 && Math.abs(ev.clientY - sy) < 10) return
+			clearTimeout(press); press = null
+			head.removeEventListener('pointermove', cancel); head.removeEventListener('pointerup', cancel); head.removeEventListener('pointercancel', cancel)
+		}
+		head.addEventListener('pointermove', cancel); head.addEventListener('pointerup', cancel); head.addEventListener('pointercancel', cancel)
+	})
+	window.ChatBar.openMenu = function () { var r = head.getBoundingClientRect(); openMenu(r.left + 8, r.bottom + 2, true) }
 
 	function start() {
 		document.body.append(bar)
